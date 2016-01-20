@@ -8,7 +8,7 @@ Currently this repository is structured around versions of the PCORNet common da
 
 ## Getting Started With GitHub
 
-[Git](https://git-scm.com/) is a free and open source version control system designed to facilitate the distributed development of source code for software. [GitHub](https://github.com/) is a public web-based Git repository hosting service with over 10 million users. This service allows inviduals or communities of users to host and collaboartively develop software and related artifacts. GitHub has been used by numerous informatics and cyberinfrastructure initiatives including [OHDSI](https://github.com/OHDSI/), [iPlant/CyVerse](https://github.com/iPlantCollaborativeOpenSource/), and [NCIP](https://github.com/NCIP/).
+[Git](https://git-scm.com/) is a free and open source version control system designed to facilitate the distributed development of source code for software. [GitHub](https://github.com/) is a public web-based Git repository hosting service with over 10 million users. This service allows inviduals or communities of users to host and collaboartively develop software and related artifacts. GitHub has been used by numerous informatics and cyberinfrastructure initiatives including [OHDSI](https://github.com/OHDSI/), [iPlant/CyVerse](https://github.com/iPlantCollaborativeOpenSource/), [Galaxy](https://github.com/galaxyproject), and [NCIP](https://github.com/NCIP/).
 
 The [LHSNet organization on GitHub](https://github.com/LHSNet) allows the LHS Network to share the technical resources that are required to support the research being conducted by the LHSNet research network.
 
