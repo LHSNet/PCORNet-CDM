@@ -1,0 +1,30 @@
+syntax: glob
+
+~*
+*.swp
+*.log
+nohup.out
+.DS_Store
+
+# IntelliJ project artifacts
+out/
+.idea/
+*.iml
+*.eml
+*.ipr
+*.iws
+*.uml
+
+# Eclipse-based project artifacts
+.settings/
+.metadata/
+*.project
+*.classpath
+*.springBeans
+
+# NetBeans project artifacts
+nb-configuration.xml
+
+# Sublime project artifacts
+*.sublime-project
+*.sublime-workspace
