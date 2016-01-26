@@ -149,6 +149,30 @@ CREATE TABLE pcori_cdmv3.vital (
     CONSTRAINT ck_vital_tobacco_type CHECK (tobacco_type IN ('01', '02', '03', '04', '05', 'NI', 'UN', 'OT'))
 );
 
+CREATE TABLE pcori_cdmv3.prescribing (
+    prescribingid    VARCHAR(50) NOT NULL,
+    patid            VARCHAR(50) NOT NULL,
+    encounterid      VARCHAR(50),
+    rx_providerid    VARCHAR(50),
+    rx_order_date    DATE,
+    rx_order_time    CHAR(5),
+    rx_start_date    DATE,
+    rx_end_date      DATE,
+    rx_quantity      DECIMAL(5, 2),
+    rx_refills       INTEGER,
+    rx_days_supply   INTEGER,
+    rx_frequency     CHAR(2),
+    rx_basis         CHAR(2),
+    rxnorm_cui       INTEGER,
+    raw_rx_med_name  VARCHAR(255),
+    raw_rx_frequency VARCHAR(255),
+    raw_rxnorm_cui   VARCHAR(255),
+    CONSTRAINT pk_prescribing PRIMARY KEY (prescribingid),
+    CONSTRAINT fk_prescribing_demographic FOREIGN KEY (patid) REFERENCES demographic (patid),
+    CONSTRAINT fk_prescribing_encounter FOREIGN KEY (encounterid) REFERENCES encounter (encounterid),
+    CONSTRAINT fk_prescribing_rx_frequency CHECK (rx_frequency IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', 'NI', 'UN', 'OT')),
+    CONSTRAINT fk_prescribing_rx_basis CHECK (rx_basis IN ('01', '02', 'NI', 'UN', 'OT'))
+);
 
 CREATE TABLE pcori_cdmv3.dispensing (
     dispensingid  VARCHAR(50) NOT NULL,
@@ -161,6 +185,7 @@ CREATE TABLE pcori_cdmv3.dispensing (
     raw_ndc       VARCHAR(255),
     CONSTRAINT pk_dispensing PRIMARY KEY (dispensingid),
     CONSTRAINT fk_dispensing_patid FOREIGN KEY (patid) REFERENCES demographic (patid),
+    CONSTRAINT fk_dispensing_prescribing FOREIGN KEY (prescribingid) REFERENCES prescribing (prescribingid)
 );
 
 CREATE TABLE pcori_cdmv3.lab_result_cm (
@@ -254,31 +279,6 @@ CREATE TABLE pcori_cdmv3.pro_cm (
     CONSTRAINT ck_pro_cm_pro_method CHECK (pro_method IN ('PA', 'EC', 'PH', 'IV', 'NI', 'UN', 'OT')),
     CONSTRAINT ck_pro_cm_pro_mode CHECK (pro_mode IN ('SF', 'SA', 'PR', 'PA', 'NI', 'UN', 'OT')),
     CONSTRAINT ck_pro_cm_pro_cat CHECK (pro_cat IN ('Y', 'N', 'NI', 'UN', 'OT'))
-);
-
-CREATE TABLE pcori_cdmv3.prescribing (
-    prescribingid    VARCHAR(50) NOT NULL,
-    patid            VARCHAR(50) NOT NULL,
-    encounterid      VARCHAR(50),
-    rx_providerid    VARCHAR(50),
-    rx_order_date    DATE,
-    rx_order_time    CHAR(5),
-    rx_start_date    DATE,
-    rx_end_date      DATE,
-    rx_quantity      DECIMAL(5, 2),
-    rx_refills       INTEGER,
-    rx_days_supply   INTEGER,
-    rx_frequency     CHAR(2),
-    rx_basis         CHAR(2),
-    rxnorm_cui       INTEGER,
-    raw_rx_med_name  VARCHAR(255),
-    raw_rx_frequency VARCHAR(255),
-    raw_rxnorm_cui   VARCHAR(255),
-    CONSTRAINT pk_prescribing PRIMARY KEY (prescribingid),
-    CONSTRAINT fk_prescribing_demographic FOREIGN KEY (patid) REFERENCES demographic (patid),
-    CONSTRAINT fk_prescribing_encounter FOREIGN KEY (encounterid) REFERENCES encounter (encounterid),
-    CONSTRAINT fk_prescribing_rx_frequency CHECK (rx_frequency IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', 'NI', 'UN', 'OT')),
-    CONSTRAINT fk_prescribing_rx_basis CHECK (rx_basis IN ('01', '02', 'NI', 'UN', 'OT'))
 );
 
 CREATE TABLE pcori_cdmv3.pcornet_trial (
