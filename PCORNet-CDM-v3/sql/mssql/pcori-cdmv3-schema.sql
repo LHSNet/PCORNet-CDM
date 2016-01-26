@@ -72,6 +72,8 @@ CREATE TABLE pcori_cdmv3.encounter (
     CONSTRAINT ck_encounter_admitting_source CHECK (admitting_source IN ('AF', 'AL', 'AV', 'ED', 'HH', 'HO', 'HS', 'IP', 'NH', 'RH', 'RS', 'SN', 'NI', 'UN', 'OT'))
 );
 
+CREATE INDEX ix_encounter_patid ON pcori_cdmv3.encounter (patid);
+
 CREATE TABLE pcori_cdmv3.diagnosis (
     diagnosisid   VARCHAR(50) NOT NULL,
     patid         VARCHAR(50) NOT NULL,
@@ -96,6 +98,9 @@ CREATE TABLE pcori_cdmv3.diagnosis (
     CONSTRAINT ck_diagnosis_pdx CHECK (pdx IN ('P', 'S', 'X', 'NI', 'UN', 'OT'))
 );
 
+CREATE INDEX ix_diagnosis_patid ON pcori_cdmv3.diagnosis (patid);
+CREATE INDEX ix_diagnosis_encounterid ON pcori_cdmv3.diagnosis (encounterid);
+
 CREATE TABLE pcori_cdmv3.procedures (
     proceduresid VARCHAR(50) NOT NULL,
     patid        VARCHAR(50) NOT NULL,
@@ -116,6 +121,9 @@ CREATE TABLE pcori_cdmv3.procedures (
     CONSTRAINT ck_procedures_px_type CHECK (px_type IN ('09', '10', '11', 'C2', 'C3', 'C4', 'H3', 'HC', 'LC', 'ND', 'RE', 'NI', 'UN', 'OT')),
     CONSTRAINT ck_procedures_px_source CHECK (px_source IN ('OD', 'BI', 'CL', 'NI', 'UN', 'OT'))
 );
+
+CREATE INDEX ix_procedures_patid ON pcori_cdmv3.procedures (patid);
+CREATE INDEX ix_procedures_encounterid ON pcori_cdmv3.procedures (encounterid);
 
 CREATE TABLE pcori_cdmv3.vital (
     vitalid          VARCHAR(50) NOT NULL,
@@ -149,6 +157,9 @@ CREATE TABLE pcori_cdmv3.vital (
     CONSTRAINT ck_vital_tobacco_type CHECK (tobacco_type IN ('01', '02', '03', '04', '05', 'NI', 'UN', 'OT'))
 );
 
+CREATE INDEX ix_vital_patid ON pcori_cdmv3.vital (patid);
+CREATE INDEX ix_vital_encounterid ON pcori_cdmv3.vital (encounterid);
+
 CREATE TABLE pcori_cdmv3.prescribing (
     prescribingid    VARCHAR(50) NOT NULL,
     patid            VARCHAR(50) NOT NULL,
@@ -174,6 +185,9 @@ CREATE TABLE pcori_cdmv3.prescribing (
     CONSTRAINT fk_prescribing_rx_basis CHECK (rx_basis IN ('01', '02', 'NI', 'UN', 'OT'))
 );
 
+CREATE INDEX ix_prescribing_patid ON pcori_cdmv3.prescribing (patid);
+CREATE INDEX ix_prescribing_encounterid ON pcori_cdmv3.prescribing (encounterid);
+
 CREATE TABLE pcori_cdmv3.dispensing (
     dispensingid  VARCHAR(50) NOT NULL,
     patid         VARCHAR(50) NOT NULL,
@@ -187,6 +201,9 @@ CREATE TABLE pcori_cdmv3.dispensing (
     CONSTRAINT fk_dispensing_patid FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
     CONSTRAINT fk_dispensing_prescribing FOREIGN KEY (prescribingid) REFERENCES pcori_cdmv3.prescribing (prescribingid)
 );
+
+CREATE INDEX ix_dispensing_patid ON pcori_cdmv3.dispensing (patid);
+CREATE INDEX ix_dispensing_encounterid ON pcori_cdmv3.dispensing (prescribingid);
 
 CREATE TABLE pcori_cdmv3.lab_result_cm (
     lab_result_cm_id   VARCHAR(50) NOT NULL,
@@ -235,6 +252,9 @@ CREATE TABLE pcori_cdmv3.lab_result_cm (
     CONSTRAINT ck_lab_result_cm_abn_ind CHECK (abn_ind IN ('AB', 'AH', 'AL', 'CH', 'CL', 'CR', 'IN', 'NL', 'NI', 'UN', 'OT'))
 );
 
+CREATE INDEX ix_lab_result_cm_patid ON pcori_cdmv3.lab_result_cm (patid);
+CREATE INDEX ix_lab_result_cm_encounterid ON pcori_cdmv3.lab_result_cm (encounterid);
+
 CREATE TABLE pcori_cdmv3.condition (
     conditionid          VARCHAR(50) NOT NULL,
     patid                VARCHAR(50) NOT NULL,
@@ -258,6 +278,9 @@ CREATE TABLE pcori_cdmv3.condition (
     CONSTRAINT ck_condition_source CHECK (condition_source IN ('PR', 'HC', 'RG', 'PC', 'NI', 'UN', 'OT'))
 );
 
+CREATE INDEX ix_condition_patid ON pcori_cdmv3.condition (patid);
+CREATE INDEX ix_condition_encounterid ON pcori_cdmv3.condition (encounterid);
+
 CREATE TABLE pcori_cdmv3.pro_cm (
     pro_cm_id        VARCHAR(50) NOT NULL,
     patid            VARCHAR(50) NOT NULL,
@@ -280,6 +303,9 @@ CREATE TABLE pcori_cdmv3.pro_cm (
     CONSTRAINT ck_pro_cm_pro_mode CHECK (pro_mode IN ('SF', 'SA', 'PR', 'PA', 'NI', 'UN', 'OT')),
     CONSTRAINT ck_pro_cm_pro_cat CHECK (pro_cat IN ('Y', 'N', 'NI', 'UN', 'OT'))
 );
+
+CREATE INDEX ix_pro_cm_patid ON pcori_cdmv3.pro_cm (patid);
+CREATE INDEX ix_pro_cm_encounterid ON pcori_cdmv3.pro_cm (encounterid);
 
 CREATE TABLE pcori_cdmv3.pcornet_trial (
     patid               VARCHAR(50) NOT NULL,
