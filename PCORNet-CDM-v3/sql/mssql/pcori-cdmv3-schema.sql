@@ -112,9 +112,9 @@ CREATE TABLE pcori_cdmv3.procedures (
     CONSTRAINT pk_procedures PRIMARY KEY (proceduresid),
     CONSTRAINT fk_procedures_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
     CONSTRAINT fk_procedures_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_diagnosis_enc_type CHECK (enc_type IN ('AV', 'ED', 'EI', 'IP', 'IS', 'OA', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_diagnosis_px_type CHECK (px_type IN ('09', '10', '11', 'C2', 'C3', 'C4', 'H3', 'HC', 'LC', 'ND', 'RE', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_diagnosis_px_source CHECK (px_source IN ('OD', 'BI', 'CL', 'NI', 'UN', 'OT'))
+    CONSTRAINT ck_procedures_enc_type CHECK (enc_type IN ('AV', 'ED', 'EI', 'IP', 'IS', 'OA', 'NI', 'UN', 'OT')),
+    CONSTRAINT ck_procedures_px_type CHECK (px_type IN ('09', '10', '11', 'C2', 'C3', 'C4', 'H3', 'HC', 'LC', 'ND', 'RE', 'NI', 'UN', 'OT')),
+    CONSTRAINT ck_procedures_px_source CHECK (px_source IN ('OD', 'BI', 'CL', 'NI', 'UN', 'OT'))
 );
 
 CREATE TABLE pcori_cdmv3.vital (
@@ -142,7 +142,7 @@ CREATE TABLE pcori_cdmv3.vital (
     CONSTRAINT pk_vital PRIMARY KEY (vitalid),
     CONSTRAINT fk_vital_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
     CONSTRAINT fk_vital_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_vital_vital_source CHECK (vital_source IN ('PR', 'PD', 'HC', 'HD', 'NI', 'UN', 'OT')),
+    CONSTRAINT ck_vital_source CHECK (vital_source IN ('PR', 'PD', 'HC', 'HD', 'NI', 'UN', 'OT')),
     CONSTRAINT ck_vital_bp_position CHECK (bp_position IN ('01', '02', '03', 'NI', 'UN', 'OT')),
     CONSTRAINT ck_vital_smoking CHECK (smoking IN ('01', '02', '03', '04', '05', '06', '07', '08', 'NI', 'UN', 'OT')),
     CONSTRAINT ck_vital_tobacco CHECK (tobacco IN ('01', '02', '03', '04', '06', 'NI', 'UN', 'OT')),
@@ -253,9 +253,9 @@ CREATE TABLE pcori_cdmv3.condition (
     CONSTRAINT pk_condition PRIMARY KEY (conditionid),
     CONSTRAINT fk_condition_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
     CONSTRAINT fk_condition_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_condition_condition_status CHECK (condition_status IN ('AC', 'RS', 'IN', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_condition_condition_type CHECK (condition_type IN ('09', '10', '11', 'SM', 'HP', 'AG', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_condition_condition_source CHECK (condition_source IN ('PR', 'HC', 'RG', 'PC', 'NI', 'UN', 'OT'))
+    CONSTRAINT ck_condition_status CHECK (condition_status IN ('AC', 'RS', 'IN', 'NI', 'UN', 'OT')),
+    CONSTRAINT ck_condition_type CHECK (condition_type IN ('09', '10', '11', 'SM', 'HP', 'AG', 'NI', 'UN', 'OT')),
+    CONSTRAINT ck_condition_source CHECK (condition_source IN ('PR', 'HC', 'RG', 'PC', 'NI', 'UN', 'OT'))
 );
 
 CREATE TABLE pcori_cdmv3.pro_cm (
@@ -302,8 +302,8 @@ CREATE TABLE pcori_cdmv3.death (
     death_match_confidence VARCHAR(2),
     CONSTRAINT pk_death PRIMARY KEY (patid, death_date, death_source),
     CONSTRAINT fk_death_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT ck_death_death_date_impute CHECK (death_date_impute IN ('B', 'D', 'M', 'N', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_death_death_source CHECK (death_source IN ('L', 'N', 'D', 'S', 'T', 'NI', 'UN', 'OT')),
+    CONSTRAINT ck_death_date_impute CHECK (death_date_impute IN ('B', 'D', 'M', 'N', 'NI', 'UN', 'OT')),
+    CONSTRAINT ck_death_source CHECK (death_source IN ('L', 'N', 'D', 'S', 'T', 'NI', 'UN', 'OT')),
     CONSTRAINT ck_death_match_confidence CHECK (death_match_confidence IN ('E', 'F', 'P', 'NI', 'UN', 'OT'))
 );
 
