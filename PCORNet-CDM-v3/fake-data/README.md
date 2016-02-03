@@ -10,6 +10,7 @@ This is a test dataset of fake data for the [PCORnet Common Data Model v3.0](htt
 * DIAGNOSIS
 * PROCEDURES
 * VITAL
+* HARVEST - coded for University of Michigan
 
 The procedures table currently needs additional work since many of the ESP codes are not actually procedures.
 
