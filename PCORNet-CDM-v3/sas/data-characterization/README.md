@@ -1,3 +1,5 @@
 # SAS Data Characterization Query
 
-As of Jan 22, 2016 data characterization queries are not available, but a draft workplan is available.
+SAS code and associated documentation were wownloaded from imeetcentral on Feb 26,2015.
+
+
