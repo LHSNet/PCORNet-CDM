@@ -9,38 +9,38 @@ Purpose: This script creates SAS data files from SQL Server tables for the PCORn
 
 \--------------------------------------------------------------------------------------*/
 
+LIBNAME cdm_in sqlsvr DSN=pcori_cdmv3 USER=******* PASSWORD=************ SCHEMA=pcori_cdmv3;
+LIBNAME cdm_out "c:/sasroot/pcori/cdmv3/sas_export/";
 
-libname cdm "e:/sasroot/ADVANCE_CDM/";
+proc sql noprint;
 
-proc sql noprint; 
+create table cdm_out.DEMOGRAPHIC (compress=yes) as
 
-create table cdm.DEMOGRAPHIC (compress=yes) as
-
-SELECT 
-	PATID ,
-	INPUT( BIRTH_DATE , e8601da.) AS BIRTH_DATE format date9.,
-	INPUT( BIRTH_TIME , time10.) AS BIRTH_TIME format hhmm.,
+SELECT
+    PATID ,
+    INPUT( PUT(BIRTH_DATE , e8601da.) , e8601da.) AS BIRTH_DATE format date9.,
+    INPUT( BIRTH_TIME , time.) AS BIRTH_TIME format hhmm.,
     SEX ,
     HISPANIC ,
     RACE ,
     BIOBANK_FLAG ,
     RAW_SEX ,
     RAW_HISPANIC ,
-    RAW_RACE 
-FROM ADVCDM.DEMOGRAPHIC
+    RAW_RACE
+FROM cdm_in.DEMOGRAPHIC
 ;
 
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.ENCOUNTER (compress=yes) as
+create table cdm_out.ENCOUNTER (compress=yes) as
 
 SELECT ENCOUNTERID ,
        PATID ,
-	   INPUT( ADMIT_DATE , e8601da.) AS ADMIT_DATE format date9.,
-	   INPUT( ADMIT_TIME , time10.) AS ADMIT_TIME format hhmm.,
-	   INPUT( DISCHARGE_DATE , e8601da.) AS DISCHARGE_DATE format date9.,
-	   INPUT( DISCHARGE_TIME , time10.) AS DISCHARGE_TIME format hhmm.,
+       INPUT( PUT(ADMIT_DATE , e8601da.) , e8601da.) AS ADMIT_DATE format date9.,
+       INPUT( ADMIT_TIME , time.) AS ADMIT_TIME format hhmm.,
+       INPUT( PUT(DISCHARGE_DATE , e8601da.) , e8601da.) AS DISCHARGE_DATE format date9.,
+       INPUT( DISCHARGE_TIME , time.) AS DISCHARGE_TIME format hhmm.,
        PROVIDERID ,
        FACILITY_LOCATION ,
        ENC_TYPE ,
@@ -50,26 +50,26 @@ SELECT ENCOUNTERID ,
        DRG ,
        DRG_TYPE ,
        ADMITTING_SOURCE ,
-	   RAW_SITEID ,
+       RAW_SITEID ,
        RAW_ENC_TYPE ,
        RAW_DISCHARGE_DISPOSITION ,
        RAW_DISCHARGE_STATUS ,
        RAW_DRG_TYPE ,
-       RAW_ADMITTING_SOURCE 
-FROM ADVCDM.ENCOUNTER
+       RAW_ADMITTING_SOURCE
+FROM cdm_in.ENCOUNTER
 ;
 
 
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.DIAGNOSIS (compress=yes) as
+create table cdm_out.DIAGNOSIS (compress=yes) as
 
 SELECT DIAGNOSISID ,
        PATID ,
        ENCOUNTERID ,
        ENC_TYPE ,
-       INPUT( ADMIT_DATE , e8601da.) AS ADMIT_DATE format date9.,
+       INPUT( PUT(ADMIT_DATE , e8601da.) , e8601da.) AS ADMIT_DATE format date9.,
        PROVIDERID ,
        DX ,
        DX_TYPE ,
@@ -78,62 +78,62 @@ SELECT DIAGNOSISID ,
        RAW_DX ,
        RAW_DX_TYPE ,
        RAW_DX_SOURCE ,
-       RAW_PDX 
-FROM ADVCDM.DIAGNOSIS
+       RAW_PDX
+FROM cdm_in.DIAGNOSIS
 ;
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.PROCEDURES (compress=yes) as
+create table cdm_out.PROCEDURES (compress=yes) as
 
 SELECT PROCEDURESID ,
        PATID ,
        ENCOUNTERID ,
        ENC_TYPE ,
-       INPUT( ADMIT_DATE , e8601da.) AS ADMIT_DATE format date9.,
+       INPUT( PUT(ADMIT_DATE , e8601da.) , e8601da.) AS ADMIT_DATE format date9.,
        PROVIDERID ,
-	   INPUT( PX_DATE , e8601da.) AS PX_DATE format date9.,
+       INPUT( PUT(PX_DATE , e8601da.) , e8601da.) AS PX_DATE format date9.,
        PX ,
        PX_TYPE ,
        PX_SOURCE ,
        RAW_PX ,
-       RAW_PX_TYPE 
-FROM ADVCDM.PROCEDURES
+       RAW_PX_TYPE
+FROM cdm_in.PROCEDURES
 ;
 
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.PRO_CM (compress=yes) as
+create table cdm_out.PRO_CM (compress=yes) as
 
 SELECT PRO_CM_ID ,
        PATID ,
        ENCOUNTERID ,
        PRO_ITEM ,
        PRO_LOINC ,
-	   INPUT( PRO_DATE , e8601da.) AS PRO_DATE format date9.,
-	   INPUT( PRO_TIME , time10.) AS PRO_TIME format hhmm.,
+       INPUT( PUT(PRO_DATE , e8601da.) , e8601da.) AS PRO_DATE format date9.,
+       INPUT( PRO_TIME , time.) AS PRO_TIME format hhmm.,
        PRO_RESPONSE ,
        PRO_METHOD ,
        PRO_MODE ,
        PRO_CAT ,
        RAW_PRO_CODE ,
-       RAW_PRO_RESPONSE 
-FROM ADVCDM.PRO_CM
+       RAW_PRO_RESPONSE
+FROM cdm_in.PRO_CM
 ;
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.PRESCRIBING (compress=yes) as
+create table cdm_out.PRESCRIBING (compress=yes) as
 
 SELECT PRESCRIBINGID ,
        PATID ,
        ENCOUNTERID ,
        RX_PROVIDERID ,
-	   INPUT( RX_ORDER_DATE , e8601da.) AS RX_ORDER_DATE format date9.,
-	   INPUT( RX_ORDER_TIME , time10.) AS RX_ORDER_TIME format hhmm.,
-	   INPUT( RX_START_DATE , e8601da.) AS RX_START_DATE format date9.,
-	   INPUT( RX_END_DATE , e8601da.) AS RX_END_DATE format date9.,
+       INPUT( PUT(RX_ORDER_DATE , e8601da.) , e8601da.) AS RX_ORDER_DATE format date9.,
+       INPUT( RX_ORDER_TIME , time.) AS RX_ORDER_TIME format hhmm.,
+       INPUT( PUT(RX_START_DATE , e8601da.) , e8601da.) AS RX_START_DATE format date9.,
+       INPUT( PUT(RX_END_DATE , e8601da.) , e8601da.) AS RX_END_DATE format date9.,
        RX_QUANTITY ,
        RX_REFILLS ,
        RX_DAYS_SUPPLY ,
@@ -143,34 +143,34 @@ SELECT PRESCRIBINGID ,
        RAW_RX_FREQUENCY ,
        RAW_RX_MED_NAME ,
        RAW_RXNORM_CUI
-FROM ADVCDM.PRESCRIBING
+FROM cdm_in.PRESCRIBING
 ;
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.DISPENSING (compress=yes) as
+create table cdm_out.DISPENSING (compress=yes) as
 
 SELECT DISPENSINGID ,
        PATID ,
        PRESCRIBINGID ,
-	   INPUT( DISPENSE_DATE , e8601da.) AS DISPENSE_DATE format date9.,
+       INPUT( PUT(DISPENSE_DATE , e8601da.) , e8601da.) AS DISPENSE_DATE format date9.,
        NDC ,
        DISPENSE_SUP ,
        DISPENSE_AMT ,
-       RAW_NDC 
-FROM ADVCDM.DISPENSING
+       RAW_NDC
+FROM cdm_in.DISPENSING
 ;
 
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.VITAL (compress=yes) as
+create table cdm_out.VITAL (compress=yes) as
 
 SELECT VITALID ,
        PATID ,
        ENCOUNTERID ,
-	   INPUT( MEASURE_DATE , e8601da.) AS MEASURE_DATE format date9.,
-	   INPUT( MEASURE_TIME , time10.) AS MEASURE_TIME format hhmm.,
+       INPUT( PUT(MEASURE_DATE , e8601da.) , e8601da.) AS MEASURE_DATE format date9.,
+       INPUT( MEASURE_TIME , time.) AS MEASURE_TIME format hhmm.,
        VITAL_SOURCE ,
        HT ,
        WT ,
@@ -186,16 +186,16 @@ SELECT VITALID ,
        RAW_DIASTOLIC ,
        RAW_SMOKING ,
        RAW_TOBACCO ,
-       RAW_TOBACCO_TYPE 
-FROM ADVCDM.VITAL
+       RAW_TOBACCO_TYPE
+FROM cdm_in.VITAL
 ;
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.LAB_RESULT_CM (compress=yes) as
+create table cdm_out.LAB_RESULT_CM (compress=yes) as
 
-SELECT 
-	   LAB_RESULT_CM_ID ,
+SELECT
+         LAB_RESULT_CM_ID ,
        PATID ,
        ENCOUNTERID ,
        LAB_NAME ,
@@ -205,11 +205,11 @@ SELECT
        RESULT_LOC ,
        LAB_PX ,
        LAB_PX_TYPE ,
-	   INPUT( LAB_ORDER_DATE , e8601da.) AS LAB_ORDER_DATE format date9.,
-	   INPUT( SPECIMEN_DATE , e8601da.) AS SPECIMEN_DATE format date9.,
-	   INPUT( SPECIMEN_TIME , time10.) AS SPECIMEN_TIME format hhmm.,
-	   INPUT( RESULT_DATE , e8601da.) AS RESULT_DATE format date9.,
-	   INPUT( RESULT_TIME , time10.) AS RESULT_TIME format hhmm., 
+       INPUT( PUT(LAB_ORDER_DATE , e8601da.) , e8601da.) AS LAB_ORDER_DATE format date9.,
+       INPUT( PUT(SPECIMEN_DATE , e8601da.) , e8601da.) AS SPECIMEN_DATE format date9.,
+       INPUT( SPECIMEN_TIME , time.) AS SPECIMEN_TIME format hhmm.,
+       INPUT( PUT(RESULT_DATE , e8601da.) , e8601da.) AS RESULT_DATE format date9.,
+       INPUT( RESULT_TIME , time.) AS RESULT_TIME format hhmm.,
        RESULT_QUAL ,
        PUT(RESULT_NUM, z20.10) AS RESULT_NUM , /* This RDBMS-SAS data type discrepancy is an issue being addressed by the coordinating center (sould be a SAS number)  */
        RESULT_MODIFIER ,
@@ -225,33 +225,33 @@ SELECT
        RAW_RESULT ,
        RAW_UNIT ,
        RAW_ORDER_DEPT ,
-       RAW_FACILITY_CODE 
-FROM ADVCDM.LAB_RESULT_CM
+       RAW_FACILITY_CODE
+FROM cdm_in.LAB_RESULT_CM
 ;
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.ENROLLMENT (compress=yes) as
+create table cdm_out.ENROLLMENT (compress=yes) as
 
 SELECT PATID ,
-       INPUT( ENR_START_DATE , e8601da.) AS ENR_START_DATE format date9.,
-       INPUT( ENR_END_DATE , e8601da.) AS ENR_END_DATE format date9.,  
+       INPUT( PUT(ENR_START_DATE , e8601da.) , e8601da.) AS ENR_START_DATE format date9.,
+       INPUT( PUT(ENR_END_DATE , e8601da.) , e8601da.) AS ENR_END_DATE format date9.,
        CHART ,
-       ENR_BASIS 
-FROM ADVCDM.ENROLLMENT
+       ENR_BASIS
+FROM cdm_in.ENROLLMENT
 ;
 
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.CONDITION (compress=yes) as
+create table cdm_out.CONDITION (compress=yes) as
 
 SELECT CONDITIONID ,
        PATID ,
        ENCOUNTERID ,
-	   INPUT( REPORT_DATE , e8601da.) AS REPORT_DATE format date9.,
-	   INPUT( RESOLVE_DATE , e8601da.) AS RESOLVE_DATE format date9.,
-       INPUT( ONSET_DATE , e8601da.) AS ONSET_DATE format date9.,
+       INPUT( PUT(REPORT_DATE , e8601da.) , e8601da.) AS REPORT_DATE format date9.,
+       INPUT( PUT(RESOLVE_DATE , e8601da.) , e8601da.) AS RESOLVE_DATE format date9.,
+       INPUT( PUT(ONSET_DATE , e8601da.) , e8601da.) AS ONSET_DATE format date9.,
        CONDITION_STATUS ,
        CONDITION ,
        CONDITION_TYPE ,
@@ -259,57 +259,57 @@ SELECT CONDITIONID ,
        RAW_CONDITION_STATUS ,
        RAW_CONDITION ,
        RAW_CONDITION_TYPE ,
-       RAW_CONDITION_SOURCE 
-FROM ADVCDM.CONDITION
+       RAW_CONDITION_SOURCE
+FROM cdm_in.CONDITION
 ;
 
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.PCORNET_TRIAL (compress=yes) as
+create table cdm_out.PCORNET_TRIAL (compress=yes) as
 
 SELECT PATID ,
        TRIALID ,
        PARTICIPANTID ,
        TRIAL_SITEID ,
-       INPUT( TRIAL_ENROLL_DATE , e8601da.) AS TRIAL_ENROLL_DATE format date9.,
-       INPUT( TRIAL_END_DATE , e8601da.) AS TRIAL_END_DATE format date9.,
-	   INPUT( TRIAL_WITHDRAW_DATE , e8601da.) AS TRIAL_WITHDRAW_DATE format date9.,
+       INPUT( PUT(TRIAL_ENROLL_DATE , e8601da.) , e8601da.) AS TRIAL_ENROLL_DATE format date9.,
+       INPUT( PUT(TRIAL_END_DATE , e8601da.) , e8601da.) AS TRIAL_END_DATE format date9.,
+       INPUT( PUT(TRIAL_WITHDRAW_DATE , e8601da.) , e8601da.) AS TRIAL_WITHDRAW_DATE format date9.,
        TRIAL_INVITE_CODE
-FROM ADVCDM.PCORNET_TRIAL
+FROM cdm_in.PCORNET_TRIAL
 ;
 
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.DEATH (compress=yes) as
+create table cdm_out.DEATH (compress=yes) as
 
 SELECT PATID ,
-       INPUT( DEATH_DATE , e8601da.) AS DEATH_DATE format date9.,
+       INPUT( PUT(DEATH_DATE , e8601da.) , e8601da.) AS DEATH_DATE format date9.,
        DEATH_DATE_IMPUTE ,
        DEATH_SOURCE ,
-       DEATH_MATCH_CONFIDENCE 
-FROM ADVCDM.DEATH
+       DEATH_MATCH_CONFIDENCE
+FROM cdm_in.DEATH
 ;
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.DEATH_CAUSE (compress=yes) as
+create table cdm_out.DEATH_CAUSE (compress=yes) as
 
 SELECT PATID ,
        DEATH_CAUSE ,
        DEATH_CAUSE_CODE ,
        DEATH_CAUSE_TYPE ,
        DEATH_CAUSE_SOURCE ,
-       DEATH_CAUSE_CONFIDENCE 
-FROM ADVCDM.DEATH_CAUSE
+       DEATH_CAUSE_CONFIDENCE
+FROM cdm_in.DEATH_CAUSE
 ;
 
 
 
-proc sql noprint; 
+proc sql noprint;
 
-create table cdm.HARVEST (compress=yes) as
+create table cdm_out.HARVEST (compress=yes) as
 
 SELECT NETWORKID ,
        NETWORK_NAME ,
@@ -337,20 +337,19 @@ SELECT NETWORKID ,
        REPORT_DATE_MGMT ,
        RESOLVE_DATE_MGMT ,
        PRO_DATE_MGMT ,
-	   INPUT( REFRESH_DEMOGRAPHIC_DATE , e8601da.) AS REFRESH_DEMOGRAPHIC_DATE format date9.,
-	   INPUT( REFRESH_ENROLLMENT_DATE , e8601da.) AS REFRESH_ENROLLMENT_DATE format date9.,
-	   INPUT( REFRESH_ENCOUNTER_DATE , e8601da.) AS REFRESH_ENCOUNTER_DATE format date9.,
-	   INPUT( REFRESH_DIAGNOSIS_DATE , e8601da.) AS REFRESH_DIAGNOSIS_DATE format date9.,
-	   INPUT( REFRESH_PROCEDURES_DATE , e8601da.) AS REFRESH_PROCEDURES_DATE format date9.,
-	   INPUT( REFRESH_VITAL_DATE , e8601da.) AS REFRESH_VITAL_DATE format date9.,
-	   INPUT( REFRESH_DISPENSING_DATE , e8601da.) AS REFRESH_DISPENSING_DATE format date9.,
-	   INPUT( REFRESH_LAB_RESULT_CM_DATE , e8601da.) AS REFRESH_LAB_RESULT_CM_DATE format date9.,
-	   INPUT( REFRESH_CONDITION_DATE , e8601da.) AS REFRESH_CONDITION_DATE format date9.,
-	   INPUT( REFRESH_PRO_CM_DATE , e8601da.) AS REFRESH_PRO_CM_DATE format date9.,
-	   INPUT( REFRESH_PRESCRIBING_DATE , e8601da.) AS REFRESH_PRESCRIBING_DATE format date9.,
-	   INPUT( REFRESH_PCORNET_TRIAL_DATE , e8601da.) AS REFRESH_PCORNET_TRIAL_DATE format date9.,
-	   INPUT( REFRESH_DEATH_DATE , e8601da.) AS REFRESH_DEATH_DATE format date9.,
-	   INPUT( REFRESH_DEATH_CAUSE_DATE, e8601da.) AS REFRESH_DEATH_CAUSE_DATE format date9.
-FROM ADVCDM.HARVEST
+       INPUT( PUT(REFRESH_DEMOGRAPHIC_DATE , e8601da.) , e8601da.) AS REFRESH_DEMOGRAPHIC_DATE format date9.,
+       INPUT( PUT(REFRESH_ENROLLMENT_DATE , e8601da.) , e8601da.) AS REFRESH_ENROLLMENT_DATE format date9.,
+       INPUT( PUT(REFRESH_ENCOUNTER_DATE , e8601da.) , e8601da.) AS REFRESH_ENCOUNTER_DATE format date9.,
+       INPUT( PUT(REFRESH_DIAGNOSIS_DATE , e8601da.) , e8601da.) AS REFRESH_DIAGNOSIS_DATE format date9.,
+       INPUT( PUT(REFRESH_PROCEDURES_DATE , e8601da.) , e8601da.) AS REFRESH_PROCEDURES_DATE format date9.,
+       INPUT( PUT(REFRESH_VITAL_DATE , e8601da.) , e8601da.) AS REFRESH_VITAL_DATE format date9.,
+       INPUT( PUT(REFRESH_DISPENSING_DATE , e8601da.) , e8601da.) AS REFRESH_DISPENSING_DATE format date9.,
+       INPUT( PUT(REFRESH_LAB_RESULT_CM_DATE , e8601da.) , e8601da.) AS REFRESH_LAB_RESULT_CM_DATE format date9.,
+       INPUT( PUT(REFRESH_CONDITION_DATE , e8601da.) , e8601da.) AS REFRESH_CONDITION_DATE format date9.,
+       INPUT( PUT(REFRESH_PRO_CM_DATE , e8601da.) , e8601da.) AS REFRESH_PRO_CM_DATE format date9.,
+       INPUT( PUT(REFRESH_PRESCRIBING_DATE , e8601da.) , e8601da.) AS REFRESH_PRESCRIBING_DATE format date9.,
+       INPUT( PUT(REFRESH_PCORNET_TRIAL_DATE , e8601da.) , e8601da.) AS REFRESH_PCORNET_TRIAL_DATE format date9.,
+       INPUT( PUT(REFRESH_DEATH_DATE , e8601da.) , e8601da.) AS REFRESH_DEATH_DATE format date9.,
+       INPUT( PUT(REFRESH_DEATH_CAUSE_DATE , e8601da.), e8601da.) AS REFRESH_DEATH_CAUSE_DATE format date9.
+FROM cdm_in.HARVEST
 ;
-
