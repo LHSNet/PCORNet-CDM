@@ -37,7 +37,7 @@ CREATE TABLE pcori_cdmv3.enrollment (
     enr_basis      CHAR(1)     NOT NULL,
     CONSTRAINT pk_enrollment PRIMARY KEY (patid, enr_start_date, enr_basis),
     CONSTRAINT fk_enrollment_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT ck_enrollment_char CHECK (chart IN ('Y', 'N')),
+    CONSTRAINT ck_enrollment_chart CHECK (chart IN ('Y', 'N')),
     CONSTRAINT ck_enrollment_enr_bases CHECK (enr_basis IN ('I', 'G', 'A', 'E'))
 );
 
