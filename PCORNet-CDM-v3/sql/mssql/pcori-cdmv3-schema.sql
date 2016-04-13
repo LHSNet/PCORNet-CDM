@@ -182,8 +182,8 @@ CREATE TABLE pcori_cdmv3.prescribing (
     CONSTRAINT pk_prescribing PRIMARY KEY (prescribingid),
     CONSTRAINT fk_prescribing_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
     CONSTRAINT fk_prescribing_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT fk_prescribing_rx_frequency CHECK (rx_frequency IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', 'NI', 'UN', 'OT')),
-    CONSTRAINT fk_prescribing_rx_basis CHECK (rx_basis IN ('01', '02', 'NI', 'UN', 'OT'))
+    CONSTRAINT ck_prescribing_rx_frequency CHECK (rx_frequency IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', 'NI', 'UN', 'OT')),
+    CONSTRAINT ck_prescribing_rx_basis CHECK (rx_basis IN ('01', '02', 'NI', 'UN', 'OT'))
 );
 
 CREATE INDEX ix_prescribing_patid ON pcori_cdmv3.prescribing (patid);
