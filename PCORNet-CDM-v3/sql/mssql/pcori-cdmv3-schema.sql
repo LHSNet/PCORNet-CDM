@@ -73,6 +73,7 @@ CREATE TABLE pcori_cdmv3.encounter (
 );
 
 CREATE INDEX ix_encounter_patid ON pcori_cdmv3.encounter (patid);
+CREATE INDEX ix_encounter_admit_date ON pcori_cdmv3.encounter (admit_date);
 
 CREATE TABLE pcori_cdmv3.diagnosis (
     diagnosisid   VARCHAR(50) NOT NULL,
