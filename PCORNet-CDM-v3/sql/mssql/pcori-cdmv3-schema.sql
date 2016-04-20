@@ -21,12 +21,7 @@ CREATE TABLE pcori_cdmv3.demographic (
     biobank_flag CHAR(1),
     raw_sex      VARCHAR(255),
     raw_hispanic VARCHAR(255),
-    raw_race     VARCHAR(255),
-    CONSTRAINT pk_demographic PRIMARY KEY (patid),
-    CONSTRAINT ck_demographic_sex CHECK (sex IN ('A', 'F', 'M', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_demographic_hispanic CHECK (hispanic IN ('Y', 'N', 'R', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_demographic_race CHECK (race IN ('01', '02', '03', '04', '05', '06', '07', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_demographic_biobank_flag CHECK (biobank_flag IN ('Y', 'N'))
+    raw_race     VARCHAR(255)
 );
 
 CREATE TABLE pcori_cdmv3.enrollment (
@@ -34,11 +29,7 @@ CREATE TABLE pcori_cdmv3.enrollment (
     enr_start_date DATE        NOT NULL,
     enr_end_date   DATE,
     chart          CHAR(1),
-    enr_basis      CHAR(1)     NOT NULL,
-    CONSTRAINT pk_enrollment PRIMARY KEY (patid, enr_start_date, enr_basis),
-    CONSTRAINT fk_enrollment_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT ck_enrollment_chart CHECK (chart IN ('Y', 'N')),
-    CONSTRAINT ck_enrollment_enr_bases CHECK (enr_basis IN ('I', 'G', 'A', 'E'))
+    enr_basis      CHAR(1)     NOT NULL
 );
 
 CREATE TABLE pcori_cdmv3.encounter (
@@ -62,18 +53,8 @@ CREATE TABLE pcori_cdmv3.encounter (
     raw_discharge_disposition VARCHAR(255),
     raw_discharge_status      VARCHAR(255),
     raw_drg_type              VARCHAR(255),
-    raw_admitting_source      VARCHAR(255),
-    CONSTRAINT pk_encounter PRIMARY KEY (encounterid),
-    CONSTRAINT fk_encounter_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT ck_encounter_enc_type CHECK (enc_type IN ('AV', 'ED', 'EI', 'IP', 'IS', 'OA', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_encounter_discharge_disposition CHECK (discharge_disposition IN ('A', 'E', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_encounter_discharge_status CHECK (discharge_status IN ('AF', 'AL', 'AM', 'AW', 'EX', 'HH', 'HO', 'HS', 'IP', 'NH', 'RH', 'RS', 'SH', 'SN', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_encounter_drg_type CHECK (drg_type IN ('01', '02', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_encounter_admitting_source CHECK (admitting_source IN ('AF', 'AL', 'AV', 'ED', 'HH', 'HO', 'HS', 'IP', 'NH', 'RH', 'RS', 'SN', 'NI', 'UN', 'OT'))
+    raw_admitting_source      VARCHAR(255)
 );
-
-CREATE INDEX ix_encounter_patid ON pcori_cdmv3.encounter (patid);
-CREATE INDEX ix_encounter_admit_date ON pcori_cdmv3.encounter (admit_date);
 
 CREATE TABLE pcori_cdmv3.diagnosis (
     diagnosisid   VARCHAR(50) NOT NULL,
@@ -89,18 +70,8 @@ CREATE TABLE pcori_cdmv3.diagnosis (
     raw_dx        VARCHAR(255),
     raw_dx_type   VARCHAR(255),
     raw_dx_source VARCHAR(255),
-    raw_pdx       VARCHAR(255),
-    CONSTRAINT pk_diagnosis PRIMARY KEY (diagnosisid),
-    CONSTRAINT fk_diagnosis_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT fk_diagnosis_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_diagnosis_enc_type CHECK (enc_type IN ('AV', 'ED', 'EI', 'IP', 'IS', 'OA', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_diagnosis_dx_type CHECK (dx_type IN ('09', '10', '11', 'SM', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_diagnosis_dx_source CHECK (dx_source IN ('AD', 'DI', 'FI', 'IN', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_diagnosis_pdx CHECK (pdx IN ('P', 'S', 'X', 'NI', 'UN', 'OT'))
+    raw_pdx       VARCHAR(255)
 );
-
-CREATE INDEX ix_diagnosis_patid ON pcori_cdmv3.diagnosis (patid);
-CREATE INDEX ix_diagnosis_encounterid ON pcori_cdmv3.diagnosis (encounterid);
 
 CREATE TABLE pcori_cdmv3.procedures (
     proceduresid VARCHAR(50) NOT NULL,
@@ -114,17 +85,8 @@ CREATE TABLE pcori_cdmv3.procedures (
     px_type      CHAR(2)     NOT NULL,
     px_source    CHAR(2),
     raw_px       VARCHAR(255),
-    raw_px_type  VARCHAR(255),
-    CONSTRAINT pk_procedures PRIMARY KEY (proceduresid),
-    CONSTRAINT fk_procedures_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT fk_procedures_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_procedures_enc_type CHECK (enc_type IN ('AV', 'ED', 'EI', 'IP', 'IS', 'OA', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_procedures_px_type CHECK (px_type IN ('09', '10', '11', 'C2', 'C3', 'C4', 'H3', 'HC', 'LC', 'ND', 'RE', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_procedures_px_source CHECK (px_source IN ('OD', 'BI', 'CL', 'NI', 'UN', 'OT'))
+    raw_px_type  VARCHAR(255)
 );
-
-CREATE INDEX ix_procedures_patid ON pcori_cdmv3.procedures (patid);
-CREATE INDEX ix_procedures_encounterid ON pcori_cdmv3.procedures (encounterid);
 
 CREATE TABLE pcori_cdmv3.vital (
     vitalid          VARCHAR(50) NOT NULL,
@@ -147,19 +109,8 @@ CREATE TABLE pcori_cdmv3.vital (
     raw_bp_position  VARCHAR(255),
     raw_smoking      VARCHAR(255),
     raw_tobacco      VARCHAR(255),
-    raw_tobacco_type VARCHAR(255),
-    CONSTRAINT pk_vital PRIMARY KEY (vitalid),
-    CONSTRAINT fk_vital_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT fk_vital_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_vital_source CHECK (vital_source IN ('PR', 'PD', 'HC', 'HD', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_vital_bp_position CHECK (bp_position IN ('01', '02', '03', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_vital_smoking CHECK (smoking IN ('01', '02', '03', '04', '05', '06', '07', '08', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_vital_tobacco CHECK (tobacco IN ('01', '02', '03', '04', '06', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_vital_tobacco_type CHECK (tobacco_type IN ('01', '02', '03', '04', '05', 'NI', 'UN', 'OT'))
+    raw_tobacco_type VARCHAR(255)
 );
-
-CREATE INDEX ix_vital_patid ON pcori_cdmv3.vital (patid);
-CREATE INDEX ix_vital_encounterid ON pcori_cdmv3.vital (encounterid);
 
 CREATE TABLE pcori_cdmv3.prescribing (
     prescribingid    VARCHAR(50) NOT NULL,
@@ -178,16 +129,8 @@ CREATE TABLE pcori_cdmv3.prescribing (
     rxnorm_cui       INTEGER,
     raw_rx_med_name  VARCHAR(255),
     raw_rx_frequency VARCHAR(255),
-    raw_rxnorm_cui   VARCHAR(255),
-    CONSTRAINT pk_prescribing PRIMARY KEY (prescribingid),
-    CONSTRAINT fk_prescribing_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT fk_prescribing_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_prescribing_rx_frequency CHECK (rx_frequency IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_prescribing_rx_basis CHECK (rx_basis IN ('01', '02', 'NI', 'UN', 'OT'))
+    raw_rxnorm_cui   VARCHAR(255)
 );
-
-CREATE INDEX ix_prescribing_patid ON pcori_cdmv3.prescribing (patid);
-CREATE INDEX ix_prescribing_encounterid ON pcori_cdmv3.prescribing (encounterid);
 
 CREATE TABLE pcori_cdmv3.dispensing (
     dispensingid  VARCHAR(50) NOT NULL,
@@ -197,14 +140,8 @@ CREATE TABLE pcori_cdmv3.dispensing (
     ndc           VARCHAR(11) NOT NULL,
     dispense_sup  INTEGER,
     dispense_amt  DECIMAL(5, 2),
-    raw_ndc       VARCHAR(255),
-    CONSTRAINT pk_dispensing PRIMARY KEY (dispensingid),
-    CONSTRAINT fk_dispensing_patid FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT fk_dispensing_prescribing FOREIGN KEY (prescribingid) REFERENCES pcori_cdmv3.prescribing (prescribingid)
+    raw_ndc       VARCHAR(255)
 );
-
-CREATE INDEX ix_dispensing_patid ON pcori_cdmv3.dispensing (patid);
-CREATE INDEX ix_dispensing_encounterid ON pcori_cdmv3.dispensing (prescribingid);
 
 CREATE TABLE pcori_cdmv3.lab_result_cm (
     lab_result_cm_id   VARCHAR(50) NOT NULL,
@@ -237,24 +174,8 @@ CREATE TABLE pcori_cdmv3.lab_result_cm (
     raw_result         VARCHAR(255),
     raw_unit           VARCHAR(255),
     raw_order_dept     VARCHAR(255),
-    raw_facility_code  VARCHAR(255),
-    CONSTRAINT pk_lab_result_cm PRIMARY KEY (lab_result_cm_id),
-    CONSTRAINT fk_lab_result_cm_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT fk_lab_result_cm_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_lab_result_cm_lab_name CHECK (lab_name IN ('A1C', 'CK', 'CK_MB', 'CK_MBI', 'CREATININE', 'HGB', 'LDL', 'INR', 'TROP_I', 'TROP_T_QL', 'TROP_T_QN')),
-    CONSTRAINT ck_lab_result_cm_specimen_source CHECK (specimen_source IN ('BLOOD', 'CSF', 'PLASMA', 'PPP', 'SERUM', 'SR_PLS', 'URINE', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_lab_result_cm_priority CHECK (priority IN ('E', 'R', 'S', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_lab_result_cm_result_loc CHECK (result_loc IN ('L', 'P', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_lab_result_cm_lab_px_type CHECK (lab_px_type IN ('09', '10', '11', 'C2', 'C3', 'C4', 'H3', 'HC', 'LC', 'ND', 'RE', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_lab_result_cm_result_qual CHECK (result_qual IN ('BORDERLINE', 'POSITIVE', 'NEGATIVE', 'UNDETERMINED', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_lab_result_cm_result_modifier CHECK (result_modifier IN ('EQ', 'GE', 'GT', 'LE', 'LT', 'TX', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_lab_result_cm_norm_modifier_low CHECK (norm_modifier_low IN ('EQ', 'GE', 'GT', 'NO', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_lab_result_cm_norm_modifier_high CHECK (norm_modifier_high IN ('EQ', 'LE', 'LT', 'NO', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_lab_result_cm_abn_ind CHECK (abn_ind IN ('AB', 'AH', 'AL', 'CH', 'CL', 'CR', 'IN', 'NL', 'NI', 'UN', 'OT'))
+    raw_facility_code  VARCHAR(255)
 );
-
-CREATE INDEX ix_lab_result_cm_patid ON pcori_cdmv3.lab_result_cm (patid);
-CREATE INDEX ix_lab_result_cm_encounterid ON pcori_cdmv3.lab_result_cm (encounterid);
 
 CREATE TABLE pcori_cdmv3.condition (
     conditionid          VARCHAR(50) NOT NULL,
@@ -270,17 +191,8 @@ CREATE TABLE pcori_cdmv3.condition (
     raw_condition_status VARCHAR(255),
     raw_condition        VARCHAR(255),
     raw_condition_type   VARCHAR(255),
-    raw_condition_source VARCHAR(255),
-    CONSTRAINT pk_condition PRIMARY KEY (conditionid),
-    CONSTRAINT fk_condition_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT fk_condition_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_condition_status CHECK (condition_status IN ('AC', 'RS', 'IN', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_condition_type CHECK (condition_type IN ('09', '10', '11', 'SM', 'HP', 'AG', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_condition_source CHECK (condition_source IN ('PR', 'HC', 'RG', 'PC', 'NI', 'UN', 'OT'))
+    raw_condition_source VARCHAR(255)
 );
-
-CREATE INDEX ix_condition_patid ON pcori_cdmv3.condition (patid);
-CREATE INDEX ix_condition_encounterid ON pcori_cdmv3.condition (encounterid);
 
 CREATE TABLE pcori_cdmv3.pro_cm (
     pro_cm_id        VARCHAR(50) NOT NULL,
@@ -295,18 +207,8 @@ CREATE TABLE pcori_cdmv3.pro_cm (
     pro_mode         CHAR(2),
     pro_cat          VARCHAR(2),
     raw_pro_code     VARCHAR(255),
-    raw_pro_response VARCHAR(255),
-    CONSTRAINT pk_pro_cm PRIMARY KEY (pro_cm_id),
-    CONSTRAINT fk_pro_cm_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT fk_pro_cm_encounter FOREIGN KEY (encounterid) REFERENCES pcori_cdmv3.encounter (encounterid),
-    CONSTRAINT ck_pro_cm_pro_item CHECK (pro_item BETWEEN 'PN_0001' AND 'PN_0021'),
-    CONSTRAINT ck_pro_cm_pro_method CHECK (pro_method IN ('PA', 'EC', 'PH', 'IV', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_pro_cm_pro_mode CHECK (pro_mode IN ('SF', 'SA', 'PR', 'PA', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_pro_cm_pro_cat CHECK (pro_cat IN ('Y', 'N', 'NI', 'UN', 'OT'))
+    raw_pro_response VARCHAR(255)
 );
-
-CREATE INDEX ix_pro_cm_patid ON pcori_cdmv3.pro_cm (patid);
-CREATE INDEX ix_pro_cm_encounterid ON pcori_cdmv3.pro_cm (encounterid);
 
 CREATE TABLE pcori_cdmv3.pcornet_trial (
     patid               VARCHAR(50) NOT NULL,
@@ -316,9 +218,7 @@ CREATE TABLE pcori_cdmv3.pcornet_trial (
     trial_enroll_date   DATE,
     trial_end_date      DATE,
     trial_withdraw_date DATE,
-    trial_invite_code   VARCHAR(20),
-    CONSTRAINT pk_pcornet_trial PRIMARY KEY (patid, trialid, participantid),
-    CONSTRAINT fk_pcornet_trial_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid)
+    trial_invite_code   VARCHAR(20)
 );
 
 CREATE TABLE pcori_cdmv3.death (
@@ -326,12 +226,7 @@ CREATE TABLE pcori_cdmv3.death (
     death_date             DATE        NOT NULL,
     death_date_impute      VARCHAR(2),
     death_source           VARCHAR(2)  NOT NULL,
-    death_match_confidence VARCHAR(2),
-    CONSTRAINT pk_death PRIMARY KEY (patid, death_date, death_source),
-    CONSTRAINT fk_death_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT ck_death_date_impute CHECK (death_date_impute IN ('B', 'D', 'M', 'N', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_death_source CHECK (death_source IN ('L', 'N', 'D', 'S', 'T', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_death_match_confidence CHECK (death_match_confidence IN ('E', 'F', 'P', 'NI', 'UN', 'OT'))
+    death_match_confidence VARCHAR(2)
 );
 
 CREATE TABLE pcori_cdmv3.death_cause (
@@ -340,13 +235,7 @@ CREATE TABLE pcori_cdmv3.death_cause (
     death_cause_code       CHAR(2)     NOT NULL,
     death_cause_type       VARCHAR(2)  NOT NULL,
     death_cause_source     VARCHAR(2)  NOT NULL,
-    death_cause_confidence VARCHAR(2),
-    CONSTRAINT pk_death_cause PRIMARY KEY (patid, death_cause, death_cause_code, death_cause_type, death_cause_source),
-    CONSTRAINT fk_death_cause_demographic FOREIGN KEY (patid) REFERENCES pcori_cdmv3.demographic (patid),
-    CONSTRAINT ck_death_cause_code CHECK (death_cause_code IN ('09', '10', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_death_cause_type CHECK (death_cause_type IN ('C', 'I', 'O', 'U', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_death_cause_source CHECK (death_cause_source IN ('L', 'N', 'D', 'S', 'T', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_death_cause_confidence CHECK (death_cause_confidence IN ('E', 'F', 'P', 'NI', 'UN', 'OT'))
+    death_cause_confidence VARCHAR(2)
 );
 
 CREATE TABLE pcori_cdmv3.harvest (
@@ -389,27 +278,5 @@ CREATE TABLE pcori_cdmv3.harvest (
     refresh_prescribing_date   DATE,
     refresh_pcornet_trial_date DATE,
     refresh_death_date         DATE,
-    refresh_death_cause_date   DATE,
-    CONSTRAINT pk_harvest PRIMARY KEY (networkid, datamartid),
-    CONSTRAINT ck_harvest_datamart_platform CHECK (datamart_platform IN ('01', '02', '03', '04', '05', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_datamart_claims CHECK (datamart_claims IN ('01', '02', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_datamart_ehr CHECK (datamart_ehr IN ('01', '02', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_birth_date_mgmt CHECK (birth_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_enr_start_date_mgmt CHECK (enr_start_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_enr_end_date_mgmt CHECK (enr_end_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_admit_date_mgmt CHECK (admit_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_discharge_date_mgmt CHECK (discharge_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_px_date_mgmt CHECK (px_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_rx_order_date_mgmt CHECK (rx_order_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_rx_start_date_mgmt CHECK (rx_start_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_rx_end_date_mgmt CHECK (rx_end_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_dispense_date_mgmt CHECK (dispense_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_lab_order_date_mgmt CHECK (lab_order_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_specimen_date_mgmt CHECK (specimen_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_result_date_mgmt CHECK (result_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_measure_date_mgmt CHECK (measure_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_onset_date_mgmt CHECK (onset_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_report_date_mgmt CHECK (report_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_resolve_date_mgmt CHECK (resolve_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT')),
-    CONSTRAINT ck_harvest_pro_date_mgmt CHECK (pro_date_mgmt IN ('01', '02', '03', '04', 'NI', 'UN', 'OT'))
+    refresh_death_cause_date   DATE
 );
