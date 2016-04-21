@@ -1,4 +1,5 @@
-USE pcori_cdmv3_test
+USE pcori_cdmv3
+GO
 
 ALTER TABLE pcori_cdmv3.demographic DROP CONSTRAINT pk_demographic
 ALTER TABLE pcori_cdmv3.demographic DROP CONSTRAINT ck_demographic_sex

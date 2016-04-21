@@ -1,4 +1,4 @@
-USE PCORI_CDMV3_TEST
+USE pcori_cdmv3
 GO
 
 ALTER TABLE pcori_cdmv3.demographic ADD CONSTRAINT pk_demographic PRIMARY KEY (patid)

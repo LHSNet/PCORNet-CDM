@@ -1,4 +1,4 @@
-USE pcori_cdmv3_test
+USE pcori_cdmv3
 GO
 
 DROP INDEX pcori_cdmv3.ix_encounter_patid
