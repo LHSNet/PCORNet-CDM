@@ -179,6 +179,7 @@ class ETL implements Closeable {
         }
     }
 
+    // language=SQL
     private static final String SQL_DEMOGRAPHIC = """
 USE <%=database%>
 
@@ -212,6 +213,7 @@ INSERT INTO pcori_cdmv3.demographic (
                          FROM pcori_cdmv3.demographic d (NOLOCK)
                          WHERE d.patid = demo.patid)"""
 
+    // language=SQL
     private static final String SQL_ENCOUNTER = """
 USE <%=database%>
 
@@ -267,6 +269,7 @@ INSERT INTO pcori_cdmv3.encounter (
                          FROM pcori_cdmv3.encounter enc (NOLOCK)
                          WHERE enc.encounterid = e.encounterid)"""
 
+    // language=SQL
     private static final String SQL_DEATH = """
 USE <%=database%>
 
@@ -291,6 +294,7 @@ INSERT INTO pcori_cdmv3.death (
                          FROM pcori_cdmv3.death d (NOLOCK)
                          WHERE d.patid = dt.patid)"""
 
+    // language=SQL
     private static final String SQL_ENROLLMENT = """
 USE <%=database%>
 
@@ -316,6 +320,7 @@ INSERT INTO pcori_cdmv3.enrollment (
                                AND e.enr_start_date = enr.enr_start_date
                                AND e.enr_basis = enr.enr_basis)"""
 
+    // language=SQL
     private static final String SQL_CONDITION = """
 USE <%=database%>
 
@@ -360,6 +365,7 @@ INSERT INTO pcori_cdmv3.condition (
                                AND cond.encounterid = c.encounterid
                                AND cond.conditionid = c.conditionid)"""
 
+    // language=SQL
     private static final String SQL_DIAGNOSIS = """
 USE <%=database%>
 
@@ -402,6 +408,7 @@ INSERT INTO pcori_cdmv3.diagnosis (
                          FROM pcori_cdmv3.diagnosis diag (NOLOCK)
                          WHERE diag.diagnosisid = d.diagnosisid)"""
 
+    // language=SQL
     private static final String SQL_PROCEDURES = """
 USE <%=database%>
 
@@ -440,6 +447,7 @@ INSERT INTO pcori_cdmv3.procedures (
                          FROM pcori_cdmv3.procedures pro (NOLOCK)
                          WHERE pro.proceduresid = pr.proceduresid)"""
 
+    // language=SQL
     private static final String SQL_VITAL = """
 USE <%=database%>
 
@@ -499,6 +507,7 @@ INSERT INTO pcori_cdmv3.vital (
                                AND vt.measure_date = v.measure_date
                                AND vt.measure_time = v.measure_time)"""
 
+    // language=SQL
     private static final String SQL_PRESCRIBING = """
 USE <%=database%>
 
@@ -549,6 +558,7 @@ INSERT INTO pcori_cdmv3.prescribing (
                                AND p.patid = pr.patid
                                AND p.encounterid = pr.encounterid)"""
 
+    // language=SQL
     private static final String SQL_LAB_RESULT_CM = """
 USE <%=database%>
 
