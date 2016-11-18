@@ -9,7 +9,6 @@
 --            http://www.apache.org/licenses/LICENSE-2.0
 
 CREATE SCHEMA pcori_cdmv3;
-GO
 
 CREATE TABLE pcori_cdmv3.demographic (
     patid        VARCHAR(50) NOT NULL,
