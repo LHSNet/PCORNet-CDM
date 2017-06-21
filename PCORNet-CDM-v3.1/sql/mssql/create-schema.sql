@@ -1,4 +1,4 @@
--- PCORnet Common Data Model v3.0
+-- PCORnet Common Data Model v3.1
 -- Model 2016-11-15
 
 -- SCHEMA   : PCORI_CDMV3.1
@@ -21,8 +21,8 @@ CREATE TABLE pcori_cdmv3_1.demographic (
     race                    CHAR(2),
     biobank_flag            CHAR(1),
     raw_sex                 VARCHAR(255),
-    raw_ sexual_orientation VARCHAR(255),
-    raw_ gender_identity    VARCHAR(255),
+    raw_sexual_orientation  VARCHAR(255),
+    raw_gender_identity     VARCHAR(255),
     raw_hispanic            VARCHAR(255),
     raw_race                VARCHAR(255)
 );
