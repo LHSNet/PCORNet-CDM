@@ -132,20 +132,21 @@ CREATE TABLE pcori_cdmv4_1.vital (
 
 
 CREATE TABLE pcori_cdmv4_1.dispensing (
-    dispensingid              VARCHAR(50) NOT NULL,
-    patid                     VARCHAR(50) NOT NULL,
-    prescribingid             VARCHAR(50),
-    dispense_date             DATE        NOT NULL,
-    ndc                       VARCHAR(11) NOT NULL,
-    dispense_sup              DECIMAL(15, 8),
-    dispense_amt              DECIMAL(15, 8),
-    dispense_dose_disp        DECIMAL(15, 8),
-    dispense_dose_disp_unit   VARCHAR(50),
-    dispense_route            VARCHAR(50),
-    raw_ndc                   VARCHAR(255),
-    raw_dispense_dose_disp    VARCHAR(255),
-    raw_dispense_dose_unit    VARCHAR(255),
-    raw_dispense_route        VARCHAR(255)
+    dispensingid                 VARCHAR(50) NOT NULL,
+    patid                        VARCHAR(50) NOT NULL,
+    prescribingid                VARCHAR(50),
+    dispense_date                DATE        NOT NULL,
+    ndc                          VARCHAR(11) NOT NULL,
+    dispense_sup                 DECIMAL(15, 8),
+    dispense_amt                 DECIMAL(15, 8),
+    dispense_dose_disp           DECIMAL(15, 8),
+    dispense_dose_disp_unit      VARCHAR(50),
+    dispense_route               VARCHAR(50),
+    raw_ndc                      VARCHAR(255),
+    raw_dispense_dose_disp       VARCHAR(255),
+    raw_dispense_dose_unit       VARCHAR(255),
+    raw_dispense_route           VARCHAR(255),
+    raw_dispense_dose_disp_unit  VARCHAR(255)
 );
 
 CREATE TABLE pcori_cdmv4_1.lab_result_cm (
@@ -214,7 +215,7 @@ CREATE TABLE pcori_cdmv4_1.pro_cm (
     pro_method                     CHAR(2),
     pro_mode                       CHAR(2),
     pro_cat                        VARCHAR(2),
-    cha                            VARCHAR(10),
+    pro_item_version               VARCHAR(10),
     pro_measure_name               VARCHAR(100),
     pro_measure_seq                VARCHAR(10),
     pro_measure_score              DECIMAL(15, 8),
@@ -301,7 +302,7 @@ CREATE TABLE pcori_cdmv4_1.med_admin (
     medadmin_start_time             CHAR(5),
     medadmin_stop_date              DATE,
     medadmin_stop_time              CHAR(5),
-    medadmin_type                   CHAR(5),
+    medadmin_type                   CHAR(2),
     medadmin_code                   VARCHAR(50),
     medadmin_dose_admin             DECIMAL(15, 8),
     medadmin_dose_admin_unit        VARCHAR(50),
